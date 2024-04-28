@@ -1,4 +1,4 @@
-name: deeploc20
+name: deeploc22
 dependencies:
   - python=3.8
   - pip
