@@ -354,7 +354,7 @@ class DataloaderHandler:
         embedding_file = h5py.File(self.embedding_file, "r")
         test_dataset = EmbeddingsLocalizationDataset(embedding_file, test_df)
         test_batches = test_dataset.get_batch_indices(4096*4, BATCH_SIZE, extra_toks_per_seq=0)
-        test_dataloader = torch.utils.data.DataLoader(test_dataset, collate_fn=TrainBatchConverter(self.alphabet, self.embed_len), batch_sampler=test_batches)
+        test_dataloader = torch.utils.data.DataLoader(test_dataset, collate_fn=TrainBatchConverter(self.alphabet, self.embed_len), batch_sampler=test_batches, num_workers=52)
         return test_dataloader, test_df
 
     def get_partition_dataloader_inner(self, partition_i):
@@ -363,7 +363,7 @@ class DataloaderHandler:
         embedding_file = h5py.File(self.embedding_file, "r")
         test_dataset = EmbeddingsLocalizationDataset(embedding_file, test_df)
         test_batches = test_dataset.get_batch_indices(4096*4, BATCH_SIZE, extra_toks_per_seq=0)
-        test_dataloader = torch.utils.data.DataLoader(test_dataset, collate_fn=TrainBatchConverter(self.alphabet, self.embed_len), batch_sampler=test_batches)
+        test_dataloader = torch.utils.data.DataLoader(test_dataset, collate_fn=TrainBatchConverter(self.alphabet, self.embed_len), batch_sampler=test_batches, num_workers=52)
 
         return test_dataloader, test_df
     
@@ -382,13 +382,15 @@ class DataloaderHandler:
             train_dataset,
             shuffle=True,
             batch_size=BATCH_SIZE,
-            drop_last=True)
+            drop_last=True,
+            num_workers=52)
 
         val_dataset = SignalTypeDataset(split_val_X, split_val_y)
         val_dataloader = torch.utils.data.DataLoader(
             val_dataset,
             shuffle=False,
-            batch_size=BATCH_SIZE)
+            batch_size=BATCH_SIZE,
+            num_workers=52)
         
         return train_dataloader, val_dataloader
 
